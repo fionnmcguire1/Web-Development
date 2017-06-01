@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by fionnmcguire (http://jsbin.com/cipehiw/9/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>C13316356 Fionn Mcguire Lab 3</title>
+</head>
+<body>
+  <script type="text/javascript">
+
+  var boxes = ""; //This handles the 8x8 div output
+  var box_tracker = []; //This is Always the previous line
+  var new_line_box_var = []; //This is always the next line
+  for (var i = 1; i < 101; i++) // Making an 101 divs
+  {
+    var randomizer = Math.random(); //Making random variable between 0 and 1
+    box_tracker[i] = randomizer; //Assigning the random variable 
+    //to the element in an array
+    //This if statement creates different colours for the divs
+    if(randomizer > 0.5)
+    {
+      var color = "#66B2FF";
+    }
+    else
+    {
+      var color = "#FF99CC";
+    }
+    //Appending the div to the string to be the output
+    boxes += "<div style='float:left; width:8px;height:8px; background-color:" + color + ";'></div>";
+  }
+  for(var j = 1; j < 50; j++)
+  { //50 lines
+  for(var i = 1; i < 101; i++)
+  { //101 boxes
+    //Creating variables to analyze the rules
+    //if the first box or last box there must be a wraparound.
+    if(i === 1)
+    {
+      var left = box_tracker[box_tracker.length - 1];
+      var middle = box_tracker[i];
+      var right = box_tracker[i+1];
+    }
+    else if(i === box_tracker.length - 1)
+    {
+      var left = box_tracker[i-1];
+      var middle = box_tracker[i];
+      var right = box_tracker[1];
+    }
+    else
+    {
+      var left = box_tracker[i-1];
+      var middle = box_tracker[i];
+      var right = box_tracker[i+1];
+    }
+    //Creating the rules and defining the next line based on the parents and siblings
+    if(left > 0.5 && middle > 0.5 && right > 0.5)
+    {
+      new_line_box_var[i] = 1;
+    }
+    else if(left > 0.5 && middle > 0.5 && right < 0.5)
+    {
+      new_line_box_var[i] = 0;
+    }
+    else if(left > 0.5 && middle < 0.5 && right > 0.5)
+    {
+      new_line_box_var[i] = 1;
+    }
+    else if(left > 0.5 && middle < 0.5 && right < 0.5)
+    {
+      new_line_box_var[i] = 1;
+    }
+    else if(left < 0.5 && middle > 0.5 && right > 0.5)
+    {
+      new_line_box_var[i] = 0;
+    }
+    else if(left < 0.5 && middle > 0.5 && right < 0.5)
+    {
+      new_line_box_var[i] = 1;
+    }
+    else if(left < 0.5 && middle < 0.5 && right > 0.5)
+    {
+      new_line_box_var[i] = 1;
+    }
+    if(left < 0.5 && middle < 0.5 && right < 0.5)
+    {
+      new_line_box_var[i] = 0;
+    }
+    //Same deal, defining the colour based on if the var is 0 or 1
+    if(new_line_box_var[i] > 0.5)
+    {
+      var color = "#66B2FF";
+    }
+    else
+    {
+      var color = "#FF99CC";
+    }
+    //building the output strings next line
+    boxes += "<div style='float:left; width:8px;height:8px; background-color:" + color + ";'></div>";
+  }
+    //Making the last line the first array so the next line can be cleared overwritten.
+  for(var i = 1; i< 101; i++){
+    box_tracker[i] = new_line_box_var[i]
+    
+  }}
+  //Outputting the output string to the DOM
+  document.write(boxes);
+    
+  </script>
+</body>
+</html>

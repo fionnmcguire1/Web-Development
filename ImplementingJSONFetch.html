@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by fionnmcguire (http://jsbin.com/cupoput/10/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Fionn Mcguire Lab 6 Part 3,4,5</title>
+</head>
+<body>
+
+<script id="jsbin-javascript">
+
+var uid = new Array();
+var uid_counter = 0;
+var index_counter =0;
+var checker = 0;
+var i =0;
+var j =0;
+var information_retreived = new Array();
+
+
+var options =  
+    { 
+      method :"GET",
+      headers: 
+      {      
+        userId: 0,
+        id: 0,
+        title: "",
+        completed: false 
+      }
+    }
+//http://www.example.com/todos
+fetch('http://jsonplaceholder.typicode.com/todos', options) 
+.then(  
+    function(response) 
+    {  
+      if (response.status !== 200) 
+      {  
+        console.log('Fetch response error');  
+        return;  
+      } 
+      response.json().then(function(data) 
+      {
+        information_retreived = data;
+        //console.log(information_retreived)
+        for(i=0; i< information_retreived.length; i++)
+        {
+          checker = 0;
+          for(j=0;j<index_counter;j++)
+          {
+              if(information_retreived[i].userId === uid[j][0])
+              {
+                checker = checker+1;
+              }
+
+          }
+          
+          if(checker === 0)
+          {
+             //uid.push(information_retreived[i].userId)
+             uid[index_counter] = new Array(2)
+             uid[index_counter][0] = information_retreived[i].userId;
+             uid[index_counter][1] = 0;
+             index_counter = index_counter+1;
+          }
+          if(information_retreived[i].userId === 10 && information_retreived[i].completed === false)
+            {
+              uid_counter = uid_counter +1;
+            }
+        
+        
+          
+           for(j=0;j<index_counter;j++) 
+           {
+               if(uid[j][0] === information_retreived[i].userId)
+               {
+                  if(information_retreived[i].completed === false)
+                  {
+                     uid[j][1] = uid[j][1]+1 
+                  }
+               }
+           }
+        }
+        
+             
+        
+        console.log("Number of todos with userId of 10:")
+        console.log(uid_counter)
+        console.log("List of userIds in order of most uncompleted todos:")
+        //console.log(uid[][1].sort())
+        //var greatest_no = 0;
+        var ordered_array_temp = new Array();
+        var ordered_array = new Array();
+        for(i=0;i<index_counter;i++)
+        {
+           ordered_array_temp[i]=uid[i][1]
+           
+        }
+        //console.log(ordered_array_temp)
+        ordered_array_temp = ordered_array_temp.sort(function(a, b){return a - b})
+        //console.log(ordered_array_temp)
+        
+        //console.log(ordered_array_temp)
+        j=0
+        var k =0
+        for(j=0;j<index_counter;j++)
+        {
+        for(i=0;i<index_counter;i++)
+        {
+          
+          //for(j=0;j<index_counter;j++)
+          //{
+           if(uid[i][1] === ordered_array_temp[j])
+           {
+             checker = 0
+             for(k=0;k<ordered_array.length;k++)
+               {
+                 if(uid[i][0] === ordered_array[k])
+                   {
+                     checker = 1
+                   }
+               }
+              if(checker === 0 )
+                {
+                  ordered_array.push(uid[i][0])
+                }
+           }
+            //j=j++
+          //}
+        }
+         }
+        
+        console.log(ordered_array.reverse())
+      });  
+    }  
+  )  
+.catch(function(err) 
+{  
+    console.log('Callback Error', err);  
+})
+
+</script>
+</body>
+</html>

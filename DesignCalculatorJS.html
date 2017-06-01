@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by fionnmcguire (http://jsbin.com/degoho/11/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<!--
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Calculator</title>
+</head>
+<body>
+  <div id="calculator">
+    <input type="text" disabled placeholder="0">
+    <div class="flex-container">
+      <button class="flex-item">(</button>
+      <button class="flex-item">)</button>
+      <button class="flex-item">±</button>
+      <button class="flex-item">÷</button>
+      <button class="flex-item">7</button>
+      <button class="flex-item">8</button>
+      <button class="flex-item">9</button>
+      <button class="flex-item">x</button>
+      <button class="flex-item">4</button>
+      <button class="flex-item">5</button>
+      <button class="flex-item">6</button>
+      <button class="flex-item">-</button>
+      <button class="flex-item">1</button>
+      <button class="flex-item">2</button>
+      <button class="flex-item">3</button>
+      <button class="flex-item">+</button>
+      <button class="flex-item">0</button>
+      <button class="flex-item">.</button>
+      <button class="flex-item">C</button>
+      <button class="flex-item">=</button>
+    </div>
+  </div>
+</body>
+</html>-->
+
+<html>
+<head>
+<style id="jsbin-css">
+
+input[type=text] {
+  font-size: 2em;
+  text-align: right;
+  border-radius: 5px;
+  width: 240px;
+  height: 35px;
+  margin-bottom: 10px;
+  padding: 1%;
+}
+button {
+  font-size: 1.1em;
+  border-radius: 5px;
+  width: 50px;
+}
+.flex-container {
+  display: inline-flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+.flex-item {
+  text-align: center;
+  padding: .5em;;
+  font-size: 1em;
+  flex-grow: 1;
+  margin: 0 5px 5px 0;
+}
+#calculator {
+  width: 250px;
+  font-size: 100%;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 7px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Verdana;
+}
+</style>
+</head>
+<body>
+  <script type='javascript'>
+<alert(“Hello World!”)
+</script>
+  
+<script id="jsbin-javascript">
+//Making the container calculator with type div and styling it.
+var calculator = document.createElement('div');
+calculator.style.width = "220px";
+calculator.style.border = "1px solid black";
+calculator.style.borderRadius = "7px";
+calculator.style.padding = "10px";
+//Attaching calculator to the DOM
+document.body.appendChild(calculator);
+
+//Creating the input box
+var result_calc = document.createElement("INPUT");
+
+    var result_calc_node = document.createTextNode("0");
+    result_calc.appendChild(result_calc_node);
+    result_calc.style.fontSize = "2em";
+    result_calc.placeholder = "0"
+    result_calc.style.fontColor = "Black";
+    result_calc.style.textAlign = "right";
+    result_calc.style.borderRadius= "5px";
+    result_calc.style.width= "200px";
+    result_calc.style.height= "30px";
+    result_calc.style.marginBottom= "10px";
+    result_calc.style.marginLeft= "5px";
+    result_calc.style.padding= "1%";
+    //Attaching the input box to the calculator
+    calculator.appendChild(result_calc);
+
+document.write ("<br>");
+//Making an array of the different symbols that appear on a calculator
+var symbols = ["(", ")", "±", "÷","7", "8", "9", "X","4",
+               "5", "6", "-","1", "2", "3", "+","0", ".", "C", "="];
+
+//For each symbol
+for (i = 0; i < symbols.length; i++) 
+{ 
+    //Dropping a line every 4th symbol
+    if(i%4 === 0 && i !=0)
+    {     
+      document.write ("<br>");
+    }
+    //For each symbol a button is made, styled, attached to the calculator
+    var j = document.createElement("Button");
+    var k = document.createTextNode(symbols[i]);
+    j.appendChild(k);
+    j.style.width = "50px";
+    j.style.height = "35px";
+    j.style.fontSize = "1.1em";
+    j.style.fontFamily = "Verdana";
+    j.style.backgroundColor = "#C0C0C0";
+    j.style.marginLeft = "2.5px";
+    j.style.marginRight = "2.5px";
+    j.style.marginBottom = "2.5px";
+    j.style.marginTop = "2.5px";
+    j.style.borderRadius = "5px";
+    
+    calculator.appendChild(j);
+}
+
+
+
+</script>
+</body>
+</html>
+

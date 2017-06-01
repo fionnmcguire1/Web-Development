@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by fionnmcguire (http://jsbin.com/foxohut/7/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head> 
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://cdn.jsdelivr.net/rsvp/3.0.6/rsvp.js"></script>
+    <script       src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/2.2.28/rx.all.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <meta charset="utf-8">  
+    <title>Fionn Mcguire C13316356 Lab 5 Part 2</title>  
+<style id="jsbin-css">
+body{
+  position: absolute;
+}
+p {
+  display: inline;
+  font-size: 3em;
+  font-family: VERDANA;
+}
+
+h1 {  
+  font-size: 2em;
+  font-family: VERDANA;
+}
+
+div[id=clockadoodledo]{
+  margin: 1px;
+  margin-left:40px;
+  padding: 1%;
+  width: 395px;
+  height: 380px;
+}
+
+div[id=ssr]{
+  margin: 1px;
+  margin-top:40px;
+  padding: 1%;
+  width: 395px;
+  height: 380px;
+}
+
+input[id=btn]{
+  width:200px;
+  text-shadow: 0px -2px #82BF56;
+  border-radius: 10px;
+	font-family: VERDANA;
+	font-size: 25px;
+	color: #FFF;
+	text-decoration: none;
+  padding: 10px 40px;
+  
+}
+</style>
+</head>  
+<body> 
+  <table border='0' width='1250px'>
+    <tr height='530px'>
+      <td width='50%'> 
+          <div id="clockadoodledo">             
+            <canvas id="canvas" width="500px" height="500px"> </canvas>
+          </div>
+      
+    </td><td width='50%' valign='top' align='center'>
+      <div id='ssr'>
+        <input type ="button" id='btn' style='background-color:#66FFB2;' value = "Start" onclick="ssr('start')" class="flex-item"/>
+        <input type ="button" id='btn'style='background-color:#FF6666;' value = "Stop" onclick="ssr('stop')" class="flex-item"/>
+        <input type ="button" id='btn'style='background-color:#A0A0A0;' value = "Split" onclick="ssr('split')" class="flex-item"/>
+        <input type ="button" id='btn' style='background-color:#6692FF;' value = "Reset" onclick="ssr('reset')" class="flex-item"/>
+      <div>
+      <div id='display_splits'>          
+          <p id="dispMin">00</p>
+          <p id="dispSec">:00</p>
+          <p id="dispMil">:00</p>
+      </div>
+      <br><br>
+        <div style='border-style: solid;
+    border-width: medium; border-color:grey;'>
+          <h1>Splits:</h1>
+        <div id='display_splits'>
+          
+          <p id="dispMin1">00</p>
+          <p id="dispSec1">:00</p>
+          <p id="dispMil1">:00</p>
+      </div>
+        <div id='display_splits'>
+          
+          <p id="dispMin2">00</p>
+          <p id="dispSec2">:00</p>
+          <p id="dispMil2">:00</p>
+      </div>
+        <div id='display_splits'> 
+          
+          <p id="dispMin3">00</p>
+          <p id="dispSec3">:00</p>
+          <p id="dispMil3">:00</p>
+      </div>
+        </div>
+       
+    </div>
+    </td>
+    </tr>
+  </table>
+  </div>  
+<script id="jsbin-javascript">
+
+    let milliseconds = 0;
+    let seconds = 0;
+    let minutes = 0;
+    let milliseconds1 = 0;
+    let seconds1 = 0;
+    let minutes1 = 0;
+    let milliseconds2 = 0;
+    let seconds2 = 0;
+    let minutes2 = 0;
+    let milliseconds3 = 0;
+    let seconds3 = 0;
+    let minutes3 = 0;
+
+    var counter = 0;
+    let pminute = 0;
+    let psecond = 0;
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+    let radius = canvas.height / 2;
+    ctx.translate(radius, radius);
+    radius = radius * 0.90
+    updateClock();
+
+    let pauser = new Rx.Subject();
+    let subscription;
+    let source = Rx.Observable
+        .interval(10)
+        .timeInterval()
+        .pausable(pauser);
+    function ssr(value){
+        subscription = source.subscribe(
+            function (x) {
+                milliseconds+=1;
+                if ( milliseconds == 100 ){
+                    milliseconds = 0;
+                    seconds+=1;
+                }
+              
+              if(counter != 0 && counter > 0.5)
+              {
+                console.log(counter);
+                  milliseconds1+=1;
+                 
+                 if ( milliseconds1 == 100 ){
+                    milliseconds1 = 0;
+                    seconds1+=1;
+                }
+              }
+              if(counter != 0 && counter > 1.5)
+              {
+                console.log(counter);
+                  milliseconds2+=1;
+                  
+                 if ( milliseconds2 == 100 ){
+                    milliseconds2 = 0;
+                    seconds2+=1;
+                }
+              }
+              if(counter != 0 && counter > 2.5)
+              {
+                console.log(counter);
+                  milliseconds3+=1;
+                 
+                 if ( milliseconds3 == 100 ){
+                    milliseconds3 = 0;
+                    seconds3+=1;
+                }
+              }
+              
+              
+                if ( seconds == 60 ){
+                    seconds = 0;
+                    minutes+=1;
+                }
+              
+                updateClock();
+                updateValues();
+            },
+            function (err) {
+                console.log('Error: ' + err);
+            },
+            function () {
+                console.log('Completed');
+            }
+        );
+        
+        if(value == 'start'){
+              pauser.onNext(true);
+        }
+      
+        if(value == 'stop'){
+            pauser.onNext(false);
+          subscription.shutdown();
+          subscription.unsubscribe();
+        }
+        
+        if(value == 'reset'){
+            hours = 0;
+            milliseconds = 0;
+            seconds = 0;
+            minutes = 0;      
+            milliseconds1 = 0;
+            seconds1 = 0;
+            minutes1 = 0;
+            milliseconds2 = 0;
+            seconds2 = 0;
+            minutes2 = 0;
+            milliseconds3 = 0;
+            seconds3 = 0;
+            minutes3 = 0;
+            
+            updateClock();
+            updateValues();
+        }
+      if(value == 'split'){
+        counter = counter + 1;
+      }
+    }
+
+    function updateValues()
+    {
+        
+        if(minutes<10)
+        {
+            document.getElementById('dispMin').innerHTML = "0" + minutes;
+        }
+        else
+        {
+            document.getElementById('dispMin').innerHTML = "" + minutes;
+        }
+        if(seconds<10)
+        {
+            document.getElementById('dispSec').innerHTML = ":0" + seconds;
+        }
+        else
+        {
+            document.getElementById('dispSec').innerHTML = ":" + seconds;
+        }
+        if(milliseconds<10)
+        {
+           document.getElementById('dispMil').innerHTML = ":0" + milliseconds;
+        }
+        else
+        {
+            document.getElementById('dispMil').innerHTML = ":" + milliseconds;
+        }
+        if(counter != 0 && counter >0.5)
+        {
+            if(minutes1<10)
+            {
+                document.getElementById('dispMin1').innerHTML = "0" + minutes1;
+            }
+            else
+            {
+                document.getElementById('dispMin1').innerHTML = "" + minutes1;
+            }
+            if(seconds1<10)
+            {
+                document.getElementById('dispSec1').innerHTML = ":0" + seconds1;
+            }
+            else
+            {
+                document.getElementById('dispSec1').innerHTML = ":" + seconds1;
+            }
+            if(milliseconds1<10)
+            {
+               document.getElementById('dispMil1').innerHTML = ":0" + milliseconds1;
+            }
+            else
+            {
+                document.getElementById('dispMil1').innerHTML = ":" + milliseconds1;
+            }
+        }
+      if(counter != 0 && counter >1.5)
+        {
+            if(minutes2<10)
+            {
+                document.getElementById('dispMin2').innerHTML = "0" + minutes2;
+            }
+            else
+            {
+                document.getElementById('dispMin2').innerHTML = "" + minutes2;
+            }
+            if(seconds2<10)
+            {
+                document.getElementById('dispSec2').innerHTML = ":0" + seconds2;
+            }
+            else
+            {
+                document.getElementById('dispSec2').innerHTML = ":" + seconds2;
+            }
+            if(milliseconds2<10)
+            {
+               document.getElementById('dispMil2').innerHTML = ":0" + milliseconds2;
+            }
+            else
+            {
+                document.getElementById('dispMil2').innerHTML = ":" + milliseconds2;
+            }
+        }
+      if(counter != 0 && counter >2.5)
+        {
+            if(minutes3<10)
+            {
+                document.getElementById('dispMin3').innerHTML = "0" + minutes3;
+            }
+            else
+            {
+                document.getElementById('dispMin3').innerHTML = "" + minutes3;
+            }
+            if(seconds3<10)
+            {
+                document.getElementById('dispSec3').innerHTML = ":0" + seconds3;
+            }
+            else
+            {
+                document.getElementById('dispSec3').innerHTML = ":" + seconds3;
+            }
+            if(milliseconds3<10)
+            {
+               document.getElementById('dispMil3').innerHTML = ":0" + milliseconds3;
+            }
+            else
+            {
+                document.getElementById('dispMil3').innerHTML = ":" + milliseconds3;
+            }
+        }
+    }
+    
+    
+    function updateClock(){
+        drawClock();
+        psecond=(seconds*Math.PI/30);
+        drawHand(ctx, psecond, radius*0.8, radius*0.015);
+        pminute=(minutes*Math.PI/30)+(seconds*Math.PI/(30*60));
+        drawHand(ctx, pminute, radius*0.8, radius*0.03);
+    }
+    
+    
+    function drawClock() {
+        let grad;
+        ctx.beginPath();
+        ctx.arc(2, 0, radius, 0, 2*Math.PI);
+        //Clock background face as solid black
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        grad = ctx.createRadialGradient(2,0,radius*0.95, 0,0,radius*1.05);
+        //First outside colour
+        grad.addColorStop(0, 'grey');
+        //Furtherst outside colour of the clock
+        grad.addColorStop(0.5, 'grey');
+        ctx.strokeStyle = grad;
+      //Governs the inside size of the black face
+        ctx.lineWidth = radius*0.1;
+        ctx.stroke();
+        ctx.beginPath();
+        //Draws the numbers on the clock as touching the borders
+        ctx.arc(0, 0, radius*0.03, 0, 2*Math.PI);
+        //The numbers on the clockface
+        ctx.fillStyle = 'grey';
+        ctx.fill();
+
+        let ang;
+        let num;
+        ctx.font = radius*0.05 + "px arial";
+        ctx.textBaseline="middle";
+        ctx.textAlign="center";
+  
+        for(num = 0; num < 60; num+=5){
+            ang = num * Math.PI / 30;
+            ctx.rotate(ang);
+            ctx.translate(0, -radius*0.85);
+            ctx.rotate(-ang);
+            ctx.fillText(num.toString(), 0, 0);
+            ctx.rotate(ang);
+            ctx.translate(0, radius*0.85);
+            ctx.rotate(-ang);
+        }
+    }
+    function drawHand(ctx, pos, length, width) {
+        ctx.beginPath();
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        ctx.moveTo(0,0);
+        ctx.rotate(pos);
+        ctx.lineTo(0, -length);
+        ctx.stroke();
+        ctx.rotate(-pos);
+    }
+</script>
+</body>
+</html>

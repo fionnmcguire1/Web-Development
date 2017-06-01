@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2017 by fionnmcguire (http://jsbin.com/xodiyah/30/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Lab 4</title>
+</head>
+<body>
+  <div style='margin-left:10%; margin-right:10%; font-family:verdana'>
+    <br><br><br>
+  <table width="100%" border='0'>
+    <tr>
+      <td width='70%'>
+        <input style='font-size:18pt; border-radius: 10px; width:100%; height:25px' type="text" id="username_search"  placeholder="username"
+></input>
+      </td>
+      <td width='30' align='center'>
+        <button style='width:90%; border-radius: 10px; height:30px' type="submit" onclick="
+go_fetch('https://api.github.com/users', options,1,document.getElementById('username_search').value)">Search</button>
+      </td>
+    </tr> 
+  </table>
+  <br><br>
+<table width='100%' border='0' style='valign:top;'>
+  <tr style='valign:top;'>
+    <td width='47%'><h3>User Profile</h3></td>
+    <td width='6%'></td>
+    <td width='47%'><h3>User Repos</h3></td>
+  </tr> 
+  <tr>
+    <td>
+      
+      <table style="margin:0; cellspacing:0px; border-collapse: collapse" border='1' width='350'>
+        <tr style=''><td id='avatar'><img height="320" width="400" src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.1024x1024.jpg" ></td></tr>
+        <tr><td id='name'>Name</td></tr>
+        <tr><td id = 'username'>Username</td></tr>
+        <tr><td id = 'email'>Email</td></tr>
+        <tr><td id = 'location'>Location</td></tr>
+        <tr><td id = 'number_of_gists'>Number Of Gists</td></tr>
+      </table></td>
+    <td></td>
+    <td valign='top'><table border='0' style='overflow-y:scroll;
+   height:440px;
+   display:table; width:100%;'  id='repo_table'>
+        <tr width='100%'><td width='100%' >Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+        <tr><td>Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+        <tr><td>Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+        <tr><td>Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+        <tr><td>Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+        <tr><td>Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+      <tr><td>Name</td></tr>
+       <tr><td>Description<hr></td></tr>
+      </table></td>
+    
+  </tr>
+</table>
+</div>
+<script id="jsbin-javascript">
+var i =0;
+var j =0;
+var username_search = "";
+var options =  
+    { 
+      method :"GET",
+      headers: 
+      {      
+
+      }
+    }
+function search_executed() {
+    username_search = document.getElementById("username_search").value;
+}
+function go_fetch(fetch_url,options,fetch_level,username_search){
+  
+  fetch(fetch_url, options) 
+    .then(  
+    function(response) {        
+      if (response.status !== 200) {  
+        console.log('Looks like there was a problem');  
+        return;  
+      }
+      response.json().then(function(data) { 
+        var i = 0;
+        var index = -1;
+        if(fetch_level === 1)
+        {         
+           while (i<data.length)
+                    {
+                        if(data[i].login === ""+username_search+"")
+                        {
+                           index = i;
+                        }
+                      i = i+1;
+                    }
+
+        document.getElementById("username").innerHTML = "Username: " +data[index].login;
+        document.getElementById("avatar").innerHTML = "<img src="+data[index].avatar_url+" height='320' width='400'>";
+        go_fetch(''+data[index].url+'',options,2); 
+        }
+        else if(fetch_level === 2)
+        {
+          document.getElementById("name").innerHTML = "Name: " +data.name;
+          document.getElementById("email").innerHTML = "Email: " +data.email;
+          document.getElementById("location").innerHTML = "Location: " +data.location;
+          document.getElementById("number_of_gists").innerHTML = "No. Gists: " +data.public_gists;
+          go_fetch(''+data.repos_url+'',options,3) 
+        }
+        else if(fetch_level === 3)
+        {
+                    document.getElementById("repo_table").innerHTML = "";
+                    var i = 0
+                    var new_html = ""
+                    while (i<data.length)
+                    {
+                        new_html = new_html+"<tr><td>Name:"+data[i].name+"</td></tr><tr><td>Description: "+data[i].description+"<hr></td></tr>";
+                      i = i+1;
+                    }
+          document.getElementById("repo_table").style = "overflow-y:scroll; height:440px; display:block; width:100%;";
+          document.getElementById("repo_table").innerHTML = ""+new_html
+        }
+
+      });  
+    }  
+  )  
+  .catch(function(err) {  
+    console.log('Fetch Error', err);  
+});
+}
+</script>
+</body>
+</html>
